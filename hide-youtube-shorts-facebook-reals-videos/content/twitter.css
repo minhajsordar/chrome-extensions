@@ -1,0 +1,39 @@
+/* Hide Twitter videos and reels */
+
+/* Hide video components */
+body[hide-videos="true"] div[data-testid="videoComponent"],
+body[hide-videos="true"] div[data-testid="tweetPhoto"],
+body[hide-videos="true"] div[aria-label="Embedded video"],
+body[hide-videos="true"] video {
+  display: none !important;
+}
+
+/* Hide tweets containing videos */
+body[hide-videos="true"] article[role="article"]:has(video),
+body[hide-videos="true"] article[role="article"]:has([data-testid="videoComponent"]) {
+  display: none !important;
+}
+
+/* Hide the "For you" tab */
+body[hide-videos="true"] [role="tab"]:has(svg[aria-label="For you"]),
+body[hide-videos="true"] [role="tab"]:has(svg[aria-label*="following"]) {
+  display: none !important;
+}
+
+/* Hide the "What's happening" section */
+body[hide-videos="true"] [aria-label="Timeline: Trending now"],
+body[hide-videos="true"] [aria-label*="What's happening"],
+body[hide-videos="true"] [data-testid="sidebarColumn"] {
+  display: none !important;
+}
+
+/* Hide the explore tab which often contains video content */
+body[hide-videos="true"] a[href*="explore"] {
+  display: none !important;
+}
+
+/* Hide the live video tab */
+body[hide-videos="true"] a[href*="live"],
+body[hide-videos="true"] a[href*="broadcasts"] {
+  display: none !important;
+}

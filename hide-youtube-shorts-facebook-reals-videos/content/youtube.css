@@ -1,0 +1,27 @@
+/* Hide YouTube Shorts in various parts of the UI */
+
+/* Hide Shorts in the navigation */
+body[hide-youtube-shorts="true"] #sections ytd-guide-entry-renderer:has(a[title='Shorts']),
+body[hide-youtube-shorts="true"] #items ytd-guide-entry-renderer:has(a[title='Shorts']) {
+  display: none !important;
+}
+
+/* Hide Shorts shelf on homepage */
+body[hide-youtube-shorts="true"] ytd-rich-shelf-renderer:has(a[href*="/shorts/"]) {
+  display: none !important;
+}
+
+/* Hide Shorts in search results */
+body[hide-youtube-shorts="true"] ytd-video-renderer:has(a[href*="/shorts/"]) {
+  display: none !important;
+}
+
+/* Hide Shorts tab on channel pages */
+body[hide-youtube-shorts="true"] #tabsContainer yt-tab-shape:has(a[title='Shorts']) {
+  display: none !important;
+}
+
+/* Hide Shorts from subscription feed */
+body[hide-youtube-shorts="true"] #items ytd-grid-video-renderer:has(a[href*="/shorts/"]) {
+  display: none !important;
+}

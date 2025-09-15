@@ -1,0 +1,39 @@
+/* Hide Facebook Reels and video content */
+
+/* Hide Reels in the stories section */
+
+body[hide-reels="true"] [aria-label*="Reels"],
+body[hide-reels="true"] [aria-label*="reels"],
+body[hide-reels="true"] [aria-label*="Reel"],
+body[hide-reels="true"] [aria-label*="reel"] {
+  display: none !important;
+}
+
+/* Hide Reels from the main feed */
+body[hide-reels="true"] a[href*="/reel/"] {
+  display: none !important;
+}
+/* hide reels video */
+body[hide-reels="true"] video {
+  display: none !important;
+}
+
+/* Hide Reels from the navigation */
+body[hide-reels="true"] [role="navigation"] a[href*="reels"],
+body[hide-reels="true"] [role="navigation"] a[href*="reel"],
+body[hide-reels="true"] [role="navigation"] [aria-label*="Reels"],
+body[hide-reels="true"] [role="navigation"] [aria-label*="reels"] {
+  display: none !important;
+}
+
+/* Hide Reels tab on profile pages */
+body[hide-reels="true"] [role="tablist"] [role="tab"]:has(svg[aria-label="Reels"]),
+body[hide-reels="true"] [role="tablist"] [role="tab"]:has(svg[aria-label*="reels"]) {
+  display: none !important;
+}
+
+/* Hide video posts in the feed */
+body[hide-videos="true"] [role="article"]:has(video),
+body[hide-videos="true"] [data-pagelet*="Feed"]:has(video) {
+  display: none !important;
+}
