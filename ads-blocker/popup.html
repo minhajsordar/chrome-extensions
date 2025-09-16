@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Advanced Ad Blocker</title>
+  <style>
+    body {
+      width: 250px;
+      padding: 15px;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    h1 {
+      font-size: 18px;
+      color: #1a73e8;
+      margin-bottom: 15px;
+    }
+    .status {
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+    .enabled {
+      background-color: #e6f4ea;
+      color: #0d652d;
+    }
+    .disabled {
+      background-color: #fce8e6;
+      color: #c5221f;
+    }
+    button {
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    button:hover {
+      background-color: #1557b0;
+    }
+    .stats {
+      margin-top: 15px;
+      font-size: 12px;
+      color: #5f6368;
+    }
+  </style>
+</head>
+<body>
+  <h1>Advanced Ad Blocker</h1>
+  <div id="status" class="status enabled">Ad Blocker: Active</div>
+  
+  <button id="toggleBtn">Disable Ad Blocker</button>
+  <button id="optionsBtn">Options</button>
+  
+  <div class="stats">
+    <div>Ads blocked: <span id="adsBlocked">0</span></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

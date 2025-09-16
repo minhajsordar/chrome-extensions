@@ -83,6 +83,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           const promise = chrome.tabs.sendMessage(tab.id, {
             action: 'settingsUpdated',
             settings: request.settings
+          }).then(response => {
+            // Ignore responses from tabs that don't handle our message
+            if (response === null) {
+              console.warn('Tab does not handle settingsUpdated message:', tab.url);
+            }
           }).catch(error => {
             // Ignore errors from tabs that don't have our content script
             if (!error.message.includes('Receiving end does not exist')) {

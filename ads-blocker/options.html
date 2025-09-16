@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ad Blocker Options</title>
+  <style>
+    body {
+      width: 400px;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    h1 {
+      color: #1a73e8;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .option-group {
+      margin-bottom: 20px;
+    }
+    .option-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .option-description {
+      color: #5f6368;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+      margin-right: 10px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #1a73e8;
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    .option-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .option-label {
+      flex-grow: 1;
+    }
+    .save-btn {
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    .save-btn:hover {
+      background-color: #1557b0;
+    }
+    .status {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 4px;
+      display: none;
+    }
+    .success {
+      background-color: #e6f4ea;
+      color: #0d652d;
+    }
+    .error {
+      background-color: #fce8e6;
+      color: #c5221f;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ad Blocker Settings</h1>
+  
+  <div class="option-group">
+    <div class="option-title">General Settings</div>
+    <div class="option-description">Customize your ad blocking preferences</div>
+    
+    <div class="option-item">
+      <label class="switch">
+        <input type="checkbox" id="blockTrackers" checked>
+        <span class="slider"></span>
+      </label>
+      <span class="option-label">Block trackers</span>
+    </div>
+    
+    <div class="option-item">
+      <label class="switch">
+        <input type="checkbox" id="blockSocialWidgets" checked>
+        <span class="slider"></span>
+      </label>
+      <span class="option-label">Block social media widgets</span>
+    </div>
+    
+    <div class="option-item">
+      <label class="switch">
+        <input type="checkbox" id="blockYoutubeAds" checked>
+        <span class="slider"></span>
+      </label>
+      <span class="option-label">Block YouTube ads</span>
+    </div>
+    
+    <div class="option-item">
+      <label class="switch">
+        <input type="checkbox" id="blockFacebookAds" checked>
+        <span class="slider"></span>
+      </label>
+      <span class="option-label">Block Facebook ads</span>
+    </div>
+  </div>
+  
+  <div class="option-group">
+    <div class="option-title">Custom Filters</div>
+    <div class="option-description">Add your own filters (one per line)</div>
+    <textarea id="customFilters" rows="5" style="width: 100%; margin-top: 10px;"></textarea>
+  </div>
+  
+  <button id="saveBtn" class="save-btn">Save Settings</button>
+  
+  <div id="statusMessage" class="status"></div>
+  
+  <script src="options.js"></script>
+</body>
+</html>

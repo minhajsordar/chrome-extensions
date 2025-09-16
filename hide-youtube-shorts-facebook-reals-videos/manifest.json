@@ -31,23 +31,27 @@
     {
       "matches": ["*://*.youtube.com/*"],
       "js": ["content/youtube.js","content/common.js"],
-      "css": ["content/youtube.css", "content/anysite.css"]
+      "css": ["content/youtube.css", "content/anysite.css"],
+      "run_at": "document_idle"
     },
     {
       "matches": ["*://*.facebook.com/*"],
       "js": ["content/common.js","content/facebook.js"],
-      "css": ["content/facebook.css", "content/anysite.css"]
+      "css": ["content/facebook.css", "content/anysite.css"],
+      "run_at": "document_idle"
     },
     {
       "matches": ["*://*.twitter.com/*", "*://*.x.com/*"],  
       "js": ["content/twitter.js","content/common.js"],
-      "css": ["content/twitter.css", "content/anysite.css"]
+      "css": ["content/twitter.css", "content/anysite.css"],
+      "run_at": "document_idle"
     },
     {
       "matches": ["*://*/*"],
       "exclude_matches": ["*://*.youtube.com/*", "*://*.facebook.com/*", "*://*.twitter.com/*", "*://*.x.com/*"],
       "js": ["content/anysite.js","content/common.js"],
-      "css": ["content/anysite.css"]
+      "css": ["content/anysite.css"],
+      "run_at": "document_idle"
     }
   ],
   "background": {
