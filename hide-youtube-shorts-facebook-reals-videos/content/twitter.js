@@ -38,6 +38,7 @@ function hideTwitterVideos() {
 
 // Function to handle settings updates
 function handleSettingsUpdate(settings) {
+  commonSettingUpdate?.(settings);
   if (settings.twitter) {
     hideTwitterVideos();
   }else{
@@ -47,7 +48,7 @@ function handleSettingsUpdate(settings) {
 
 // Initial run
 chrome.storage.sync.get(['settings'], (result) => {
-  const settings = result.settings || { twitter: true };
+  const settings = result.settings || { twitter: true, photos: true, videos: true };
   if (settings.twitter) {
     hideTwitterVideos();
   }else{
@@ -63,12 +64,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 
-let settings = { twitter: true }; // default
+let settings = { twitter: true, photos: true, videos: true }; // default
 
 // Load once
 try {
   chrome.storage.sync.get(['settings'], (result) => {
-    settings = result?.settings || { twitter: true };
+    settings = result?.settings || { twitter: true, photos: true, videos: true };
   });
 
   // Watch for updates from popup/options
@@ -99,6 +100,8 @@ observer.observe(document.body, {
 });
 
 // Clean up when navigating away
-window.addEventListener("unload", () => {
-  observer.disconnect();
-});
+if (window.addEventListener && typeof window.addEventListener === 'function' && typeof window.addEventListener.unload === 'function') {
+  window.addEventListener("unload", () => {
+    observer.disconnect();
+  });
+}

@@ -11,10 +11,14 @@ function handleFbVideoPageRedirect() {
   }
 }
 
+function toggleAttribute(settings) {
+  document.body.setAttribute('hide-reels', settings.facebookReels);
+  document.body.setAttribute('hide-stories', settings.facebookStories);
+  document.body.setAttribute('hide-videos', settings.facebookVideos);
+}
+
 // Function to hide Facebook Reels
 function hideFacebookReels() {
-  console.log("hideFacebookReels", localStorage.getItem("Session"));
-  document.body.setAttribute('hide-reels', 'true');
   const reelsSelectors = [
     '[aria-label*="Reels" i]',
     '[href*="/reel/"]',
@@ -39,7 +43,6 @@ function hideFacebookReels() {
 
 // Function to hide Facebook Stories
 function hideFacebookStories() {
-  document.body.setAttribute('hide-stories', 'true');
   const storiesSelectors = [
     '[aria-label*="Stories" i]',
     '[aria-label*="Story" i]',
@@ -60,19 +63,31 @@ function hideFacebookStories() {
   });
 }
 
+function replaceVideoElement() {
+  const videoElements = document.querySelectorAll('video');
+  videoElements?.classList?.add('custom-debug5');
+  videoElements.forEach(video => {
+    const videoParent = video.parentElement;
+    const videoDiv = document.createElement('div');
+    videoDiv.style.height = video.clientHeight + 'px';
+    videoParent.replaceChild(videoDiv, video);
+  });
+}
+
 // Function to hide Facebook Videos
 function hideFacebookVideos() {
-  document.body.setAttribute('hide-videos', 'true');
   // Hide video elements
   document.querySelectorAll('video').forEach(video => {
     video.pause();
     let element = video;
+
     // Go up 3 levels to hide the video container
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 14; i++) {
       const parent = element.parentElement;
       if (!parent) break;
       element = parent;
     }
+    element?.classList?.add('custom-debug1');
     element.style.display = 'none';
   });
   // Hide video elements
@@ -85,6 +100,7 @@ function hideFacebookVideos() {
       element = parent;
     }
     element.style.display = 'none';
+    element?.classList?.add('custom-debug2');
   });
 
   // Hide video navigation buttons
@@ -97,6 +113,7 @@ function hideFacebookVideos() {
       element = parent;
     }
     element.style.display = 'none';
+    element?.classList?.add('custom-debug3');
   });
 
   // Hide watch page and video sections
@@ -114,16 +131,22 @@ function hideFacebookVideos() {
   videoSectionSelectors.forEach(selector => {
     try {
       document.querySelectorAll(selector).forEach(element => {
+        element?.classList?.add('custom-debug4');
         element.style.display = 'none';
       });
     } catch (e) {
       console.error('Error hiding video sections:', e);
     }
   });
+  replaceVideoElement();
 }
 
 // Function to handle settings updates
 function handleSettingsUpdate(settings) {
+  commonSettingUpdate?.(settings);
+  setTimeout(() => {
+    toggleAttribute(settings);
+  }, 100);
   if (settings.facebookReels) {
     hideFacebookReels();
   }else{
@@ -145,9 +168,11 @@ function handleSettingsUpdate(settings) {
 // Initial run
 chrome.storage.sync.get(['settings'], (result) => {
   const settings = result.settings || {
-    facebookReels: true,
-    facebookStories: true,
-    facebookVideos: true
+    facebookReels: false,
+    facebookStories: false,
+    facebookVideos: false,
+    photos: false,
+    videos: false
   };
   
   handleFbVideoPageRedirect();
@@ -164,16 +189,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 
 let settings = { 
-  facebookReels: true,
-  facebookStories: true,
-  facebookVideos: true }; // default
+  facebookReels: false,
+  facebookStories: false,
+  facebookVideos: false,
+  photos: false, videos: false
+}; // default
 
 // Load once
 try {
   chrome.storage.sync.get(['settings'], (result) => {
-    settings = result?.settings || { facebookReels: true,
-      facebookStories: true,
-      facebookVideos: true };
+    settings = result?.settings || { facebookReels: false,
+      facebookStories: false,
+      facebookVideos: false,
+      photos: false, videos: false };
   });
 
   // Watch for updates from popup/options
@@ -205,17 +233,21 @@ observer.observe(document.body, {
 
 
 // Clean up when navigating away
-window.addEventListener("unload", () => {
-  observer.disconnect();
-});
+if (window.addEventListener && typeof window.addEventListener === 'function' && typeof window.addEventListener.unload === 'function') {
+  window.addEventListener("unload", () => {
+    observer.disconnect();
+  });
+}
 
 // Also run on page load
 document.addEventListener('DOMContentLoaded', () => {
   chrome.storage.sync.get(['settings'], (result) => {
     const settings = result.settings || {
-      facebookReels: true,
-      facebookStories: true,
-      facebookVideos: true
+      facebookReels: false,
+      facebookStories: false,
+      facebookVideos: false,
+      photos: false,
+      videos: false
     };
     handleSettingsUpdate(settings);
   });

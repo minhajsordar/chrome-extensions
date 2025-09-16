@@ -1,0 +1,24 @@
+/* Hide YouTube Shorts in various parts of the UI */
+
+/* Hide Shorts in the navigation */
+body[hide-any-photos="true"] img,
+body[hide-any-photos="true"] picture,
+body[hide-any-photos="true"] svg,
+body[hide-any-photos="true"] i,
+body[hide-any-photos="true"] image
+{
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body[hide-any-photos="true"] div{
+background-image: none !important;
+}
+
+
+body[hide-any-videos="true"] video,
+body[hide-any-videos="true"] iframe
+{
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

@@ -8,7 +8,11 @@
     "*://*.youtube.com/*",
     "*://*.facebook.com/*",
     "*://*.twitter.com/*",
-    "*://*.x.com/*"
+    "*://*.x.com/*",
+    "*://*.instagram.com/*",
+    "*://*.tiktok.com/*",
+    "*://*.snapchat.com/*",
+    "*://*/*"
   ],
   "action": {
     "default_popup": "popup/popup.html",
@@ -26,18 +30,24 @@
   "content_scripts": [
     {
       "matches": ["*://*.youtube.com/*"],
-      "js": ["content/youtube.js"],
-      "css": ["content/youtube.css"]
+      "js": ["content/youtube.js","content/common.js"],
+      "css": ["content/youtube.css", "content/anysite.css"]
     },
     {
       "matches": ["*://*.facebook.com/*"],
-      "js": ["content/facebook.js"],
-      "css": ["content/facebook.css"]
+      "js": ["content/common.js","content/facebook.js"],
+      "css": ["content/facebook.css", "content/anysite.css"]
     },
     {
-      "matches": ["*://*.twitter.com/*", "*://*.x.com/*"],
-      "js": ["content/twitter.js"],
-      "css": ["content/twitter.css"]
+      "matches": ["*://*.twitter.com/*", "*://*.x.com/*"],  
+      "js": ["content/twitter.js","content/common.js"],
+      "css": ["content/twitter.css", "content/anysite.css"]
+    },
+    {
+      "matches": ["*://*/*"],
+      "exclude_matches": ["*://*.youtube.com/*", "*://*.facebook.com/*", "*://*.twitter.com/*", "*://*.x.com/*"],
+      "js": ["content/anysite.js","content/common.js"],
+      "css": ["content/anysite.css"]
     }
   ],
   "background": {

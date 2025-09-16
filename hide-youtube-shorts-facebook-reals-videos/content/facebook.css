@@ -13,6 +13,7 @@ body[hide-reels="true"] [aria-label*="reel"] {
 body[hide-reels="true"] a[href*="/reel/"] {
   display: none !important;
 }
+
 /* hide reels video */
 body[hide-reels="true"] video {
   display: none !important;
@@ -37,3 +38,14 @@ body[hide-videos="true"] [role="article"]:has(video),
 body[hide-videos="true"] [data-pagelet*="Feed"]:has(video) {
   display: none !important;
 }
+
+body[hide-videos="true"] [aria-label="Enter full-screen"],
+body[hide-videos="true"] [aria-label="play"],
+body[hide-videos="true"] [aria-label="Pause"],
+body[hide-videos="true"] [aria-label="Mute"],
+body[hide-videos="true"] [aria-label="Unmute"] {
+  display: none !important;
+}
+/* body[hide-videos="true"] i{
+  opacity: 0 !important;
+} */

@@ -5,6 +5,8 @@ const facebookReelsToggle = document.getElementById('facebook-reels-toggle');
 const facebookStoriesToggle = document.getElementById('facebook-stories-toggle');
 const facebookVideosToggle = document.getElementById('facebook-videos-toggle');
 const twitterToggle = document.getElementById('twitter-toggle');
+const photosToggle = document.getElementById('photos-toggle');
+const videosToggle = document.getElementById('videos-toggle');
 
 // Load saved settings
 function loadSettings() {
@@ -16,6 +18,8 @@ function loadSettings() {
       facebookStories: false,
       facebookVideos: false,
       twitter: false,
+      photos: false,
+      videos: false,
     };
     
     // Update toggle states
@@ -25,6 +29,8 @@ function loadSettings() {
     facebookStoriesToggle.checked = settings.facebookStories !== false;
     facebookVideosToggle.checked = settings.facebookVideos !== false;
     twitterToggle.checked = settings.twitter !== false;
+    photosToggle.checked = settings.photos !== false;
+    videosToggle.checked = settings.videos !== false;
   });
 }
 
@@ -37,6 +43,8 @@ function saveSettings() {
     facebookStories: facebookStoriesToggle.checked,
     facebookVideos: facebookVideosToggle.checked,
     twitter: twitterToggle.checked,
+    photos: photosToggle.checked,
+    videos: videosToggle.checked,
   };
   
   chrome.runtime.sendMessage({
@@ -60,6 +68,8 @@ facebookReelsToggle.addEventListener('change', saveSettings);
 facebookStoriesToggle.addEventListener('change', saveSettings);
 facebookVideosToggle.addEventListener('change', saveSettings);
 twitterToggle.addEventListener('change', saveSettings);
+photosToggle.addEventListener('change', saveSettings);
+videosToggle.addEventListener('change', saveSettings);
 
 // Request settings from background script
 chrome.runtime.sendMessage({action: 'getSettings'}, (response) => {
@@ -75,5 +85,7 @@ chrome.runtime.sendMessage({action: 'getSettings'}, (response) => {
     facebookStoriesToggle.checked = response.settings.facebookStories !== false;
     facebookVideosToggle.checked = response.settings.facebookVideos !== false;
     twitterToggle.checked = response.settings.twitter !== false;
+    photosToggle.checked = response.settings.photos !== false;
+    videosToggle.checked = response.settings.videos !== false;
   }
 });
