@@ -3,7 +3,7 @@
   "name": "Focus Mode - Hide Distractions",
   "version": "1.0",
   "description": "Hide distracting short-form videos from YouTube, Facebook, and Twitter",
-  "permissions": ["storage"],
+  "permissions": ["storage", "tabs", "activeTab"],
   "host_permissions": [
     "*://*.youtube.com/*",
     "*://*.facebook.com/*",
