@@ -9,9 +9,6 @@
     "*://*.facebook.com/*",
     "*://*.twitter.com/*",
     "*://*.x.com/*",
-    "*://*.instagram.com/*",
-    "*://*.tiktok.com/*",
-    "*://*.snapchat.com/*",
     "*://*/*"
   ],
   "action": {
@@ -30,26 +27,26 @@
   "content_scripts": [
     {
       "matches": ["*://*.youtube.com/*"],
-      "js": ["content/youtube.js","content/common.js"],
+      "js": ["content/common.js", "content/youtube.js", "content/bootstrap.js"],
       "css": ["content/youtube.css", "content/anysite.css"],
       "run_at": "document_idle"
     },
     {
       "matches": ["*://*.facebook.com/*"],
-      "js": ["content/common.js","content/facebook.js"],
+      "js": ["content/common.js", "content/facebook.js", "content/bootstrap.js"],
       "css": ["content/facebook.css", "content/anysite.css"],
       "run_at": "document_idle"
     },
     {
       "matches": ["*://*.twitter.com/*", "*://*.x.com/*"],  
-      "js": ["content/twitter.js","content/common.js"],
+      "js": ["content/common.js", "content/twitter.js", "content/bootstrap.js"],
       "css": ["content/twitter.css", "content/anysite.css"],
       "run_at": "document_idle"
     },
     {
       "matches": ["*://*/*"],
       "exclude_matches": ["*://*.youtube.com/*", "*://*.facebook.com/*", "*://*.twitter.com/*", "*://*.x.com/*"],
-      "js": ["content/anysite.js","content/common.js"],
+      "js": ["content/common.js", "content/anysite.js", "content/bootstrap.js"],
       "css": ["content/anysite.css"],
       "run_at": "document_idle"
     }

@@ -46,62 +46,7 @@ function handleSettingsUpdate(settings) {
   }
 }
 
-// Initial run
-chrome.storage.sync.get(['settings'], (result) => {
-  const settings = result.settings || { twitter: true, photos: true, videos: true };
-  if (settings.twitter) {
-    hideTwitterVideos();
-  }else{
-    document.body.removeAttribute('hide-videos');
-  }
-});
-
-// Listen for settings updates
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request?.action === 'settingsUpdated') {
-    handleSettingsUpdate(request.settings);
-  }
-});
-
-
-let settings = { twitter: true, photos: true, videos: true }; // default
-
-// Load once
-try {
-  chrome.storage.sync.get(['settings'], (result) => {
-    settings = result?.settings || { twitter: true, photos: true, videos: true };
-  });
-
-  // Watch for updates from popup/options
-  chrome.storage.onChanged.addListener((changes) => {
-    if (changes.settings) {
-      settings = changes.settings.newValue;
-    }
-  });
-} catch (e) {
-  console.warn("Extension context not available:", e);
-}
-
-// MutationObserver only uses the cached settings
-const observer = new MutationObserver(() => {
-  if (settings?.twitter) {
-    try {
-      hideTwitterVideos();
-    } catch (err) {
-      console.error("hideTwitterVideos failed:", err);
-    }
-  }
-});
-
-// Start observing the document with the configured parameters
-observer.observe(document.body, {
-  childList: true,
-  subtree: true
-});
-
-// Clean up when navigating away
-if (window.addEventListener && typeof window.addEventListener === 'function' && typeof window.addEventListener.unload === 'function') {
-  window.addEventListener("unload", () => {
-    observer.disconnect();
-  });
-}
+// The central bootstrap (content/bootstrap.js) now handles:
+// - fetching host-specific settings
+// - listening for updates
+// - re-applying on DOM mutations

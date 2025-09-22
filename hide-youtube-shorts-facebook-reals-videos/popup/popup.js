@@ -8,34 +8,50 @@ const twitterToggle = document.getElementById('twitter-toggle');
 const photosToggle = document.getElementById('photos-toggle');
 const videosToggle = document.getElementById('videos-toggle');
 
-// Load saved settings
+let currentHost = null;
+
+// Load saved settings for the active tab's host
 function loadSettings() {
-  chrome.storage.sync.get(['settings'], (result) => {
-    const settings = result.settings || {
-      youtubeShorts: false,
-      youtubeVideo: false,
-      facebookReels: false,
-      facebookStories: false,
-      facebookVideos: false,
-      twitter: false,
-      photos: false,
-      videos: false,
-    };
-    
-    // Update toggle states
-    youtubeShortsToggle.checked = settings.youtubeShorts !== false; // Default to true if not set
-    youtubeVideoToggle.checked = settings.youtubeVideo !== false;
-    facebookReelsToggle.checked = settings.facebookReels !== false;
-    facebookStoriesToggle.checked = settings.facebookStories !== false;
-    facebookVideosToggle.checked = settings.facebookVideos !== false;
-    twitterToggle.checked = settings.twitter !== false;
-    photosToggle.checked = settings.photos !== false;
-    videosToggle.checked = settings.videos !== false;
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const activeTab = tabs && tabs[0];
+    if (!activeTab || !activeTab.url) return;
+    try {
+      currentHost = new URL(activeTab.url).hostname;
+    } catch (e) {
+      return;
+    }
+
+    chrome.runtime.sendMessage({ action: 'getSettings', host: currentHost }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error('Error getting settings:', chrome.runtime.lastError);
+        return;
+      }
+      const settings = (response && response.settings) || {
+        youtubeShorts: true,
+        youtubeVideo: true,
+        facebookReels: true,
+        facebookStories: true,
+        facebookVideos: true,
+        twitter: true,
+        photos: true,
+        videos: true,
+      };
+
+      youtubeShortsToggle.checked = settings.youtubeShorts !== false; // default true
+      youtubeVideoToggle.checked = settings.youtubeVideo !== false;
+      facebookReelsToggle.checked = settings.facebookReels !== false;
+      facebookStoriesToggle.checked = settings.facebookStories !== false;
+      facebookVideosToggle.checked = settings.facebookVideos !== false;
+      twitterToggle.checked = settings.twitter !== false;
+      photosToggle.checked = settings.photos !== false;
+      videosToggle.checked = settings.videos !== false;
+    });
   });
 }
 
 // Save settings
 function saveSettings() {
+  if (!currentHost) return;
   const settings = {
     youtubeShorts: youtubeShortsToggle.checked,
     youtubeVideo: youtubeVideoToggle.checked,
@@ -46,15 +62,16 @@ function saveSettings() {
     photos: photosToggle.checked,
     videos: videosToggle.checked,
   };
-  
+
   chrome.runtime.sendMessage({
     action: 'updateSettings',
-    settings: settings
+    host: currentHost,
+    settings
   }, (response) => {
     if (chrome.runtime.lastError) {
       console.error('Error saving settings:', chrome.runtime.lastError);
     } else if (response && response.success) {
-      console.log('Settings saved successfully');
+      // console.log('Settings saved successfully');
     }
   });
 }
@@ -71,21 +88,5 @@ twitterToggle.addEventListener('change', saveSettings);
 photosToggle.addEventListener('change', saveSettings);
 videosToggle.addEventListener('change', saveSettings);
 
-// Request settings from background script
-chrome.runtime.sendMessage({action: 'getSettings'}, (response) => {
-  if (chrome.runtime.lastError) {
-    console.error('Error getting settings:', chrome.runtime.lastError);
-    return;
-  }
-  
-  if (response && response.settings) {
-    youtubeShortsToggle.checked = response.settings.youtubeShorts !== false;
-    youtubeVideoToggle.checked = response.settings.youtubeVideo !== false;
-    facebookReelsToggle.checked = response.settings.facebookReels !== false;
-    facebookStoriesToggle.checked = response.settings.facebookStories !== false;
-    facebookVideosToggle.checked = response.settings.facebookVideos !== false;
-    twitterToggle.checked = response.settings.twitter !== false;
-    photosToggle.checked = response.settings.photos !== false;
-    videosToggle.checked = response.settings.videos !== false;
-  }
-});
+// Also trigger an initial load when popup opens
+document.addEventListener('DOMContentLoaded', loadSettings);

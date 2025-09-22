@@ -1,6 +1,6 @@
 function showPhotos() {
     document.body.removeAttribute('hide-any-photos');
-    console.log('showPhotos');
+    // console.log('showPhotos');
 }
 function hidePhotos() {
     document.body.setAttribute('hide-any-photos', 'true');
