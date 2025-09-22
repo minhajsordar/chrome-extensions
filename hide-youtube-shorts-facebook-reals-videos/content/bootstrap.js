@@ -92,7 +92,16 @@
   }
 
   // Cleanup
-  window.addEventListener('unload', () => {
-    observer.disconnect();
+  // 'unload' is disallowed by Permissions Policy on many sites; use 'pagehide' instead.
+  // This ensures the MutationObserver is disconnected during page navigation or bfcache.
+  window.addEventListener('pagehide', () => {
+    try { observer.disconnect(); } catch (_) {}
+  });
+
+  // As an additional safety, disconnect when the page becomes hidden (e.g., prerender -> hidden).
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      try { observer.disconnect(); } catch (_) {}
+    }
   });
 })();

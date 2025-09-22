@@ -235,6 +235,46 @@ let blockedCount = 0;
 let currentPlaybackSpeed = config.videoPlayback.defaultSpeed;
 let adLoopCount = 0;
 let isAdPlaying = false;
+// Track if the user explicitly paused playback (so we don't auto-resume)
+let userPausedRequested = false;
+let lastUserPauseTs = 0;
+let currentVideoEl = null;
+
+function onYouTubePause() {
+  // If an ad is not showing when pause happens, treat this as user intent to pause
+  const adShowing = document.querySelector('.ad-showing, .ad-interrupting, .video-ads');
+  if (!adShowing) {
+    userPausedRequested = true;
+    lastUserPauseTs = Date.now();
+    debugLog('User pause detected; will not auto-resume.');
+  }
+}
+
+function onYouTubePlay() {
+  // Reset the user pause request when video starts playing again
+  if (userPausedRequested) {
+    debugLog('Playback resumed; clearing user pause flag.');
+  }
+  userPausedRequested = false;
+}
+
+function ensureYouTubePauseRespect() {
+  if (!window.location.hostname.includes('youtube.com')) return;
+  const video = document.querySelector('video');
+  if (!video) return;
+  if (currentVideoEl === video) return; // already wired
+
+  // Remove previous listeners if swapping elements
+  if (currentVideoEl) {
+    currentVideoEl.removeEventListener('pause', onYouTubePause, true);
+    currentVideoEl.removeEventListener('play', onYouTubePlay, true);
+  }
+
+  currentVideoEl = video;
+  video.addEventListener('pause', onYouTubePause, true);
+  video.addEventListener('play', onYouTubePlay, true);
+  debugLog('Attached pause/play listeners to YouTube video element.');
+}
 
 // Handle YouTube video ads
 function handleYouTubeAds() {
@@ -275,7 +315,9 @@ function handleYouTubeAds() {
       }
       
       // Try to play in case it was paused
-      video.play().catch(e => debugLog('Error playing video:', 'error', e));
+      if (!userPausedRequested) {
+        video.play().catch(e => debugLog('Error playing video:', 'error', e));
+      }
     } else {
       // If we've tried too many times, just play normally
       video.playbackRate = currentPlaybackSpeed;
@@ -312,14 +354,15 @@ function removePopups() {
         el.remove();
         debugLog(`Removed popup: ${selector}`);
       } else if (el.style) {
-        el.style.display = 'none';
+        el.style.opacity = '0';
+        el.style.pointerEvents = 'none';
       }
     });
   });
   
   // Ensure video keeps playing
   const video = document.querySelector('video');
-  if (video && video.paused) {
+  if (video && video.paused && !userPausedRequested) {
     video.play().catch(e => debugLog('Error resuming video:', 'error', e));
   }
 }
@@ -347,7 +390,8 @@ function blockAdsWithSelectors() {
           blockedCount++;
           chrome.runtime.sendMessage({ action: 'adBlocked' });
         }
-        el.style.display = 'none';
+        el.style.opacity = '0';
+        el.style.pointerEvents = 'none';
         el.remove();
       });
     } catch (e) {
@@ -361,7 +405,8 @@ function blockAdsWithSelectors() {
       element.childNodes?.forEach((childElement) => {
         if (childElement?.data.targetId && childElement?.data.targetId !== "engagement-panel-macro-markers-description-chapters") {
           //Skipping the Chapters section
-          element.style.display = 'none';
+          element.style.opacity = '0';
+          element.style.pointerEvents = 'none';
         }
       });
     }
@@ -414,6 +459,8 @@ function startAdBlocking() {
   
   // Start YouTube specific handlers if on YouTube
   if (window.location.hostname.includes('youtube.com')) {
+    // Ensure we respect user pauses by wiring video listeners
+    ensureYouTubePauseRespect();
     if (!youtubeAdInterval) {
       youtubeAdInterval = setInterval(handleYouTubeAds, 500);
       debugLog('YouTube ad handler started');
@@ -454,6 +501,8 @@ const observer = new MutationObserver((mutations) => {
   if (isAdBlockingEnabled) {
     updateAdBlockingState();
   }
+  // On DOM updates (SPA navigations, player swaps), re-ensure listeners
+  ensureYouTubePauseRespect();
 });
 
 observer.observe(document, {

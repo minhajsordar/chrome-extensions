@@ -23,5 +23,6 @@ ytd-promoted-sparkles-web-renderer,
 ytd-promoted-video-renderer,
 ytd-promoted-sparkles-text-search-renderer,
 #masthead-ad {
-    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
 }
