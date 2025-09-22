@@ -1,6 +1,5 @@
-
 // Function to handle settings updates (site-agnostic controllers)
-function handleSettingsUpdate(settings={ photos: false, videos: false }) {
+function handleSettingsUpdate(settings={ photos: false, videos: false, disableAudio: false, disableAutoplay: false }) {
   commonSettingUpdate?.(settings);
 }
 

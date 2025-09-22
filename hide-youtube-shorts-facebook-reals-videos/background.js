@@ -1,13 +1,15 @@
 // Default settings for any host (all enabled by default)
 const defaultSettings = {
   youtubeShorts: true,
-  youtubeVideo: true,
+  youtubeVideo: false,
   facebookReels: true,
   facebookStories: true,
   facebookVideos: true,
   twitter: true,
   photos: true,
   videos: true,
+  disableAudio: true,
+  disableAutoplay: true,
 };
 
 // Initialize settings with defaults if they don't exist

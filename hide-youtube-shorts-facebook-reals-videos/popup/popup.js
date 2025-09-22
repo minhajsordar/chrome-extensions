@@ -7,6 +7,7 @@ const facebookVideosToggle = document.getElementById('facebook-videos-toggle');
 const twitterToggle = document.getElementById('twitter-toggle');
 const photosToggle = document.getElementById('photos-toggle');
 const videosToggle = document.getElementById('videos-toggle');
+const disableAudioToggle = document.getElementById('disable-audio-toggle');
 
 let currentHost = null;
 
@@ -28,13 +29,15 @@ function loadSettings() {
       }
       const settings = (response && response.settings) || {
         youtubeShorts: true,
-        youtubeVideo: true,
+        youtubeVideo: false,
         facebookReels: true,
         facebookStories: true,
         facebookVideos: true,
         twitter: true,
         photos: true,
         videos: true,
+        disableAudio: true,
+        disableAutoplay: true,
       };
 
       youtubeShortsToggle.checked = settings.youtubeShorts !== false; // default true
@@ -45,6 +48,8 @@ function loadSettings() {
       twitterToggle.checked = settings.twitter !== false;
       photosToggle.checked = settings.photos !== false;
       videosToggle.checked = settings.videos !== false;
+      // Single toggle controls both: consider enabled if either is true
+      disableAudioToggle.checked = !!(settings.disableAudio || settings.disableAutoplay);
     });
   });
 }
@@ -61,6 +66,9 @@ function saveSettings() {
     twitter: twitterToggle.checked,
     photos: photosToggle.checked,
     videos: videosToggle.checked,
+    // Single toggle controls both
+    disableAudio: disableAudioToggle.checked,
+    disableAutoplay: disableAudioToggle.checked,
   };
 
   chrome.runtime.sendMessage({
@@ -87,6 +95,7 @@ facebookVideosToggle.addEventListener('change', saveSettings);
 twitterToggle.addEventListener('change', saveSettings);
 photosToggle.addEventListener('change', saveSettings);
 videosToggle.addEventListener('change', saveSettings);
+disableAudioToggle.addEventListener('change', saveSettings);
 
 // Also trigger an initial load when popup opens
 document.addEventListener('DOMContentLoaded', loadSettings);
