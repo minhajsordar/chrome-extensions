@@ -10,30 +10,12 @@ const defaultSettings = {
   videos: true,
 };
 
-// Helper to build per-host storage key
-function hostKey(host) {
-  return `hostSettings:${host}`;
-}
-
-// Migrate from monolithic 'hostSettings' object to per-host keys to avoid QUOTA_BYTES_PER_ITEM
+// Initialize settings with defaults if they don't exist
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.get(['hostSettings'], (result) => {
-    const map = result && result.hostSettings;
-    if (map && typeof map === 'object') {
-      const entries = Object.entries(map);
-      if (entries.length > 0) {
-        const toSet = {};
-        for (const [host, settings] of entries) {
-          toSet[hostKey(host)] = settings;
-        }
-        // Write all per-host items, then remove the big object
-        chrome.storage.sync.set(toSet, () => {
-          chrome.storage.sync.remove('hostSettings');
-        });
-      } else {
-        // Nothing to migrate; remove empty container
-        chrome.storage.sync.remove('hostSettings');
-      }
+  // Initialize hostSettings if not present
+  chrome.storage.local.get(['hostSettings'], (result) => {
+    if (!result.hostSettings) {
+      chrome.storage.local.set({ hostSettings: {} });
     }
   });
 });
@@ -60,10 +42,9 @@ function updateBadgeForHost(host) {
     updateBadge(defaultSettings);
     return;
   }
-  const key = hostKey(host);
-  chrome.storage.sync.get([key, 'settings'], (result) => {
-    // Back-compat: if old global 'settings' exists, prefer it if per-host missing
-    const settingsForHost = result[key] || result.settings || defaultSettings;
+  chrome.storage.local.get(['hostSettings', 'settings'], (result) => {
+    const hostSettings = result.hostSettings || {};
+    const settingsForHost = hostSettings[host] || result.settings || defaultSettings;
     updateBadge(settingsForHost);
   });
 }
@@ -140,10 +121,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   // Handle getSettings request for a specific host
   if (request.action === 'getSettings') {
     const host = request.host;
-    const key = hostKey(host);
-    chrome.storage.sync.get([key, 'settings'], (result) => {
-      // Back-compat: use old global 'settings' if present and per-host missing
-      const settingsForHost = result[key] || result.settings || defaultSettings;
+    chrome.storage.local.get(['hostSettings', 'settings'], (result) => {
+      // Back-compat: if old global 'settings' exists and hostSettings not set for host, use it
+      const hostSettings = result.hostSettings || {};
+      const settingsForHost = hostSettings[host] || result.settings || defaultSettings;
       sendResponse({ host, settings: settingsForHost });
       // Update badge to reflect these settings
       updateBadge(settingsForHost);
@@ -157,33 +138,36 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const host = request.host;
     const newSettings = request.settings || defaultSettings;
 
-    const key = hostKey(host);
-    chrome.storage.sync.set({ [key]: newSettings }, () => {
-      // Update badge using the saved settings
-      updateBadge(newSettings);
+    chrome.storage.local.get(['hostSettings'], (result) => {
+      const hostSettings = result.hostSettings || {};
+      hostSettings[host] = newSettings;
+      chrome.storage.local.set({ hostSettings }, () => {
+        // Update badge using the saved settings
+        updateBadge(newSettings);
 
-      // Notify only tabs from this host
-      chrome.tabs.query({}, (tabs) => {
-        const promises = [];
-        const targetTabs = tabs.filter(tab => {
-          try {
-            const url = new URL(tab.url || '');
-            return url.hostname === host;
-          } catch (e) {
-            return false;
-          }
-        });
+        // Notify only tabs from this host
+        chrome.tabs.query({}, (tabs) => {
+          const promises = [];
+          const targetTabs = tabs.filter(tab => {
+            try {
+              const url = new URL(tab.url || '');
+              return url.hostname === host;
+            } catch (e) {
+              return false;
+            }
+          });
 
-        targetTabs.forEach(tab => {
-          const p = chrome.tabs.sendMessage(tab.id, {
-            action: 'settingsUpdated',
-            settings: newSettings
-          }).catch(() => null);
-          promises.push(p);
-        });
+          targetTabs.forEach(tab => {
+            const p = chrome.tabs.sendMessage(tab.id, {
+              action: 'settingsUpdated',
+              settings: newSettings
+            }).catch(() => null);
+            promises.push(p);
+          });
 
-        Promise.allSettled(promises).then(() => {
-          respond({ success: true });
+          Promise.allSettled(promises).then(() => {
+            respond({ success: true });
+          });
         });
       });
     });
