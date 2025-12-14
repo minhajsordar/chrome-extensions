@@ -25,6 +25,12 @@ function init() {
   } else {
     handleUnrestrictedMode();
   }
+  currentVideoId = getCurrentVideoId();
+
+  // Add whitelist button and note button on watch page
+  if (window.location.pathname === '/watch' && currentVideoId) {
+    waitForElementAndAddButtons(currentVideoId);
+  }
 }
 
 function getCurrentVideoId() {
@@ -62,9 +68,9 @@ function handleUnrestrictedMode() {
   currentVideoId = getCurrentVideoId();
 
   // Add whitelist button and note button on watch page
-  if (window.location.pathname === '/watch' && currentVideoId) {
-    waitForElementAndAddButtons(currentVideoId);
-  }
+  // if (window.location.pathname === '/watch' && currentVideoId) {
+  //   waitForElementAndAddButtons(currentVideoId);
+  // }
 
   // Add hover tooltips to video links
   addHoverTooltips();
