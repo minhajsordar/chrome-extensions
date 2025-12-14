@@ -143,7 +143,7 @@ function addControlButtons(videoId, titleDiv) {
   whitelistBtn.textContent = isWhitelisted ? '✓ Whitelisted' : 'Add to Whitelist';
   whitelistBtn.style.background = isWhitelisted ? '#44ff44' : '#065fd4';
   whitelistBtn.style.color = isWhitelisted ? 'black' : 'white';
-  whitelistBtn.addEventListener('click', () => toggleWhitelist(videoId));
+  whitelistBtn.addEventListener('click', () => toggleWhitelist(videoId, "watch-page"));
 
   // Note button
   const noteBtn = document.createElement('button');
@@ -215,7 +215,7 @@ function showTooltip(e, videoId, linkElement) {
   btn.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
-    toggleWhitelist(videoId);
+    toggleWhitelist(videoId, "list");
     tooltip.remove();
   });
 
@@ -232,10 +232,34 @@ function showTooltip(e, videoId, linkElement) {
   });
 }
 
-function toggleWhitelist(videoId) {
-  const titleElement = document.querySelector('h1.ytd-watch-metadata yt-formatted-string') ||
-    document.querySelector('h1.title');
-  const title = titleElement ? titleElement.textContent.trim() : 'Unknown Title';
+function toggleWhitelist(videoId, type) {
+  let title
+  if (type === "watch-page") {
+    const titleElement = document.querySelector('h1.ytd-watch-metadata yt-formatted-string') ||
+      document.querySelector('h1.title');
+    title = titleElement ? titleElement.textContent.trim() : 'Unknown Title';
+  }
+
+  if (type === "list") {
+    const allATags = document.querySelectorAll("a#video-title");
+
+    for (const element of allATags) {
+      if (!element.href) continue;
+
+      let url;
+      try {
+        url = new URL(element.href, location.origin);
+      } catch {
+        continue;
+      }
+
+      if (url.pathname === "/watch" && url.searchParams.get("v") === videoId) {
+        title = element.textContent.trim();
+        break;
+      }
+    }
+  }
+  console.log(videoId,title);
 
   if (whitelist[videoId]) {
     delete whitelist[videoId];
