@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Video Details & Notes</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 24px;
+    }
+    .video-id {
+      color: #666;
+      font-size: 13px;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .action-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .watch-btn {
+      background: #065fd4;
+      color: white;
+    }
+    .watch-btn:hover {
+      background: #0448a0;
+    }
+    .remove-btn {
+      background: #ff4444;
+      color: white;
+    }
+    .remove-btn:hover {
+      background: #cc0000;
+    }
+    .notes-section {
+      margin-top: 30px;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #333;
+    }
+    .notes-list {
+      margin-bottom: 20px;
+    }
+    .note-item {
+      background: #f9f9f9;
+      border-left: 4px solid #065fd4;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+    }
+    .note-timestamp {
+      font-weight: bold;
+      color: #065fd4;
+      margin-bottom: 5px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .note-timestamp:hover {
+      text-decoration: underline;
+    }
+    .note-text {
+      color: #333;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+    .note-delete {
+      margin-top: 10px;
+      padding: 5px 10px;
+      background: #ff4444;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .note-delete:hover {
+      background: #cc0000;
+    }
+    .empty-notes {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 id="videoTitle">Loading...</h1>
+      <div class="video-id" id="videoId"></div>
+      <div class="actions">
+        <button id="watchBtn" class="action-btn watch-btn">Watch Video</button>
+        <button id="removeBtn" class="action-btn remove-btn">Remove from Whitelist</button>
+      </div>
+    </div>
+
+    <div class="notes-section">
+      <div class="section-title">📝 Notes</div>
+      <div id="notesList" class="notes-list"></div>
+    </div>
+  </div>
+
+  <script src="video-details.js"></script>
+</body>
+</html>

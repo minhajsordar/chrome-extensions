@@ -39,13 +39,33 @@ function loadSettings() {
         disableAudio: true,
         disableAutoplay: true,
       };
-
-      youtubeShortsToggle.checked = settings.youtubeShorts !== false; // default true
-      youtubeVideoToggle.checked = settings.youtubeVideo !== false;
-      facebookReelsToggle.checked = settings.facebookReels !== false;
-      facebookStoriesToggle.checked = settings.facebookStories !== false;
-      facebookVideosToggle.checked = settings.facebookVideos !== false;
-      twitterToggle.checked = settings.twitter !== false;
+      if(["youtube.com","www.youtube.com"].includes(currentHost)) {
+        youtubeShortsToggle.checked = settings.youtubeShorts !== false; // default true
+        youtubeVideoToggle.checked = settings.youtubeVideo !== false;
+        youtubeShortsToggle.closest(".platform").classList.remove("hidden");
+        youtubeVideoToggle.closest(".platform").classList.remove("hidden");
+      }else{
+        youtubeShortsToggle.closest(".platform").classList.add("hidden");
+        youtubeVideoToggle.closest(".platform").classList.add("hidden");
+      }
+      if([ "facebook.com","www.facebook.com", "m.facebook.com","www.m.facebook.com"].includes(currentHost)) {
+        facebookReelsToggle.checked = settings.facebookReels !== false;
+        facebookStoriesToggle.checked = settings.facebookStories !== false;
+        facebookVideosToggle.checked = settings.facebookVideos !== false;
+        facebookReelsToggle.closest(".platform").classList.remove("hidden");
+        facebookStoriesToggle.closest(".platform").classList.remove("hidden");
+        facebookVideosToggle.closest(".platform").classList.remove("hidden");
+      }else{
+        facebookReelsToggle.closest(".platform").classList.add("hidden");
+        facebookStoriesToggle.closest(".platform").classList.add("hidden");
+        facebookVideosToggle.closest(".platform").classList.add("hidden");
+      }
+      if(["twitter.com","www.twitter.com","x.com","www.x.com"].includes(currentHost)) {
+        twitterToggle.checked = settings.twitter !== false;
+        twitterToggle.closest(".platform").classList.remove("hidden");
+      }else{
+        twitterToggle.closest(".platform").classList.add("hidden");
+      }
       photosToggle.checked = settings.photos !== false;
       videosToggle.checked = settings.videos !== false;
       // Single toggle controls both: consider enabled if either is true
@@ -57,20 +77,26 @@ function loadSettings() {
 // Save settings
 function saveSettings() {
   if (!currentHost) return;
-  const settings = {
-    youtubeShorts: youtubeShortsToggle.checked,
-    youtubeVideo: youtubeVideoToggle.checked,
-    facebookReels: facebookReelsToggle.checked,
-    facebookStories: facebookStoriesToggle.checked,
-    facebookVideos: facebookVideosToggle.checked,
-    twitter: twitterToggle.checked,
+  const otherSettings = {
     photos: photosToggle.checked,
     videos: videosToggle.checked,
     // Single toggle controls both
     disableAudio: disableAudioToggle.checked,
     disableAutoplay: disableAudioToggle.checked,
   };
-
+  const settings = { ...otherSettings }
+  if (["youtube.com", "www.youtube.com"].includes(currentHost)) {
+    settings.youtubeShorts = youtubeShortsToggle.checked;
+    settings.youtubeVideo = youtubeVideoToggle.checked;
+  }
+  if (["facebook.com", "www.facebook.com"].includes(currentHost)) {
+    settings.facebookReels = facebookReelsToggle.checked;
+    settings.facebookStories = facebookStoriesToggle.checked;
+    settings.facebookVideos = facebookVideosToggle.checked;
+  }
+  if (["twitter.com", "www.twitter.com", "x.com", "www.x.com"].includes(currentHost)) {
+    settings.twitter = twitterToggle.checked;
+  }
   chrome.runtime.sendMessage({
     action: 'updateSettings',
     host: currentHost,

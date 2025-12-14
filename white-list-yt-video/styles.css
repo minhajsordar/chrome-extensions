@@ -1,0 +1,59 @@
+.ytwhitelist-controls {
+  display: flex;
+  gap: 10px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+  padding: 8px 0;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.ytwhitelist-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.ytwhitelist-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.ytwhitelist-btn:active {
+  transform: translateY(0);
+}
+
+.ytwhitelist-tooltip {
+  position: absolute;
+  z-index: 10000;
+  background: white;
+  border: 2px solid #065fd4;
+  border-radius: 4px;
+  padding: 5px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.ytwhitelist-tooltip-btn {
+  padding: 6px 12px;
+  background: #065fd4;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.ytwhitelist-tooltip-btn:hover {
+  background: #0448a0;
+}
+
+.ytwhitelist-empty-state {
+  grid-column: 1 / -1;
+}

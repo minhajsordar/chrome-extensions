@@ -112,3 +112,7 @@ input:checked + .slider:before {
   color: #86868b;
   margin: 0;
 }
+
+.hidden {
+  display: none;
+}
