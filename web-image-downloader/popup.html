@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Web Asset Downloader</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="row between center">
+      <div class="row center">
+        <img src="icon.png" alt="icon" class="icon" />
+        <h1>Asset Downloader</h1>
+      </div>
+    </header>
+
+    <section class="controls">
+      <label class="toggle">
+        <input type="checkbox" id="activateToggle" />
+        <span>Activate Downloader</span>
+      </label>
+      <div class="row gap">
+        <button id="refreshBtn" class="btn">Show Assets</button>
+        <button id="downloadAllBtn" class="btn">Download All</button>
+        <span class="hint">Hover on page to quick-download</span>
+      </div>
+    </section>
+
+    <section>
+      <div id="status" class="status">Ready</div>
+      <ul id="assetList" class="list"></ul>
+    </section>
+
+    <script src="popup.js" type="module"></script>
+  </body>
+  </html>

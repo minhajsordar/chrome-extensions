@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "Web Asset Downloader",
+  "description": "Download images, videos, SVGs, and take screenshots of canvas or elements. Hover to download or use the popup list.",
+  "version": "0.1.0",
+  "icons": {
+    "16": "icon.png",
+    "32": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "action": {
+    "default_title": "Asset Downloader",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "downloads",
+    "storage",
+    "scripting",
+    "activeTab",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content-script.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

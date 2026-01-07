@@ -173,6 +173,18 @@
       <button id="clearAll" class="clear-btn">Clear All</button>
     </div>
 
+    <div id="categoryBar" style="display:flex; gap:10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px;">
+      <div style="display:flex; gap:8px; flex-wrap: wrap;">
+        <button id="catAll" class="cat-filter-btn" data-category="all" style="padding:8px 12px; border:1px solid #ddd; background:#fff; border-radius:18px; cursor:pointer; font-size:12px;">All</button>
+        <button id="catUncategorized" class="cat-filter-btn" data-category="uncategorized" style="padding:8px 12px; border:1px solid #ddd; background:#fff; border-radius:18px; cursor:pointer; font-size:12px;">Uncategorized</button>
+        <div id="categoryList" style="display:flex; gap:8px; flex-wrap: wrap;"></div>
+      </div>
+      <div style="margin-left:auto; display:flex; gap:8px;">
+        <input id="newCategoryName" type="text" placeholder="New category name" style="padding:8px 10px; border:1px solid #ddd; border-radius:6px; font-size:12px; min-width:200px;">
+        <button id="addCategoryBtn" style="padding:8px 12px; border:none; background:#065fd4; color:#fff; border-radius:6px; cursor:pointer; font-size:12px; font-weight:bold;">Add Category</button>
+      </div>
+    </div>
+
     <div id="videoGrid" class="video-grid"></div>
   </div>
 

@@ -1,0 +1,27 @@
+* { box-sizing: border-box; }
+html, body { width: 360px; max-width: 360px; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif; color: #111827; }
+header { padding: 8px 12px; border-bottom: 1px solid #e5e7eb; }
+.icon { width: 18px; height: 18px; margin-right: 8px; }
+h1 { font-size: 14px; margin: 0; font-weight: 600; }
+
+section { padding: 10px 12px; }
+.row { display: flex; }
+.between { justify-content: space-between; }
+.center { align-items: center; }
+.gap { gap: 8px; }
+
+.toggle { display: inline-flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+.btn { padding: 6px 10px; border-radius: 6px; border: 1px solid #d1d5db; background: #f9fafb; cursor: pointer; font-size: 12px; }
+.btn:hover { background: #f3f4f6; }
+.hint { font-size: 11px; color: #6b7280; }
+.status { font-size: 12px; color: #374151; margin-bottom: 8px; }
+
+.list { list-style: none; padding: 0; margin: 0; max-height: 380px; overflow: auto; border-top: 1px solid #f3f4f6; }
+.item { display: grid; grid-template-columns: 42px 1fr auto; gap: 8px; padding: 8px 0; border-bottom: 1px solid #f3f4f6; }
+.thumb { width: 42px; height: 42px; object-fit: cover; border: 1px solid #e5e7eb; border-radius: 4px; background: #f9fafb; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #6b7280; }
+.meta { font-size: 11px; color: #374151; word-break: break-all; }
+.meta .type { font-weight: 600; margin-right: 6px; }
+.download { padding: 4px 8px; border-radius: 6px; border: 1px solid #2563eb; background: #3b82f6; color: white; font-size: 12px; cursor: pointer; }
+.download:hover { background: #2563eb; }
+.empty { padding: 10px; font-size: 12px; color: #6b7280; text-align: center; }
+
