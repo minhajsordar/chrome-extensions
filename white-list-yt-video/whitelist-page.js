@@ -220,10 +220,15 @@ function renderVideos() {
       : 'No notes yet';
 
     card.innerHTML = `
-      <img class="video-thumbnail" data-videoid="${videoId}" src="https://i.ytimg.com/vi/${videoId}/hq720.jpg"/>
+      <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" rel="noopener">
+        <img class="video-thumbnail" data-videoid="${videoId}" src="https://i.ytimg.com/vi/${videoId}/hq720.jpg"/>
+      </a>
       <div class="video-info">
-        <div class="video-title">${whitelist[videoId]}</div>
-        <div class="video-id">ID: ${videoId}</div>
+        <a class="video-title"
+          href="https://www.youtube.com/watch?v=${videoId}"
+          target="_blank"
+          rel="noopener"
+        >${whitelist[videoId]}</a>
         <div class="notes-preview">${notesPreview}</div>
         <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
           <label style="font-size:12px; color:#666;">Category:</label>
@@ -233,7 +238,6 @@ function renderVideos() {
           </select>
         </div>
         <div class="video-actions">
-          <button class="action-btn watch-btn" data-videoid="${videoId}">Watch Now</button>
           <button class="action-btn details-btn" data-videoid="${videoId}">Details & Notes</button>
           <button class="action-btn remove-btn" data-videoid="${videoId}">Remove</button>
         </div>
@@ -244,12 +248,12 @@ function renderVideos() {
   });
 
   // Add event listeners
-  document.querySelectorAll('.watch-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const videoId = e.target.getAttribute('data-videoid');
-      window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
-    });
-  });
+  // document.querySelectorAll('.watch-btn').forEach(btn => {
+  //   btn.addEventListener('click', (e) => {
+  //     const videoId = e.target.getAttribute('data-videoid');
+  //     window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+  //   });
+  // });
 
   document.querySelectorAll('.video-thumbnail').forEach(thumb => {
     thumb.addEventListener('click', (e) => {
